@@ -1,5 +1,5 @@
 
-var x = 4
+var x = 2
 
 
 const mybutton = document.getElementById('mybutton')
@@ -123,19 +123,21 @@ function addAllChildNodes(){
 }}
 
 function pickrandom() {
-    for (cell of getRandomList()) {
+    for (cell of getRandomList()) {/*{
       let randomColor = Math.floor(Math.random()*16777215).toString(16);
       let cellZ = [...cellElements][cell]
-      cellZ.setAttribute("style", `background:#${currentClass}`)
+      cellZ.setAttribute("style", `background:${currentClass}`)*/
+      let cellZ = [...cellElements][cell]
+      cellZ.classList.add(currentClass)}
       setTimeout(() => {  
-        cellZ.removeAttribute('style')
+        cellZ.classList.remove(currentClass)
         cellZ.classList.add('buffer')
        ; }, 2000);
        
       
    
     }
-}
+
 
 function getRandomList(){
   var randomList = new Set()
