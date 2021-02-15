@@ -128,7 +128,7 @@ function pickrandom() {
       let cellZ = [...cellElements][cell]
       cellZ.setAttribute("style", `background:${currentClass}`)*/
       let cellZ = [...cellElements][cell]
-      cellZ.classList.add(currentClass)}
+      cellZ.classList.add(currentClass)
       setTimeout(() => {  
         cellZ.classList.remove(currentClass)
         cellZ.classList.add('buffer')
@@ -137,7 +137,7 @@ function pickrandom() {
       
    
     }
-
+  }
 
 function getRandomList(){
   var randomList = new Set()
