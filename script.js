@@ -126,7 +126,7 @@ function pickrandom() {
     for (cell of getRandomList()) {
       let randomColor = Math.floor(Math.random()*16777215).toString(16);
       let cellZ = [...cellElements][cell]
-      cellZ.setAttribute("style", `background:#${randomColor}`)
+      cellZ.setAttribute("style", `background:#${currentClass}`)
       setTimeout(() => {  
         cellZ.removeAttribute('style')
         cellZ.classList.add('buffer')
