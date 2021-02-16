@@ -1,7 +1,9 @@
 *, *::after, *::before{
     box-sizing: border-box;
 }
-
+.container{
+  position:relative
+}
 body {
     margin: 0;
 }
