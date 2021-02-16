@@ -1,13 +1,7 @@
 *, *::after, *::before{
     box-sizing: border-box;
 }
-.con{
-  display: flex;
-  justify-content: center;
-  /* align horizontal */
-  align-items: center;
-  /* align vertical */
-}
+
 body {
     margin: 0;
 }
