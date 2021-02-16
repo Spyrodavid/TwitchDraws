@@ -147,11 +147,11 @@ function pickrandom() {
     if (randomcolor){
     theColor = getRandomColor()
     } else {
-      theColor = currentClass
+      theColor = "#173AEB"
     }
-    cellZ.classList.add(theColor)
+    cellZ.setAttribute("style", `background:${theColor}`)
     setTimeout(() => {
-      cellZ.classList.remove(theColor)
+      cellZ.removeAttribute("style", `background:${theColor}`)
       cellZ.classList.add('buffer');
     }, 2000);
     randclicked = true
