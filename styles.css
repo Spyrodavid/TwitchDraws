@@ -2,7 +2,7 @@
     box-sizing: border-box;
 }
 .con{
-  display: block;
+  display: inline-block;
 }
 body {
     margin: 0;
