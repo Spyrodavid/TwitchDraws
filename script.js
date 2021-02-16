@@ -1,4 +1,3 @@
-
 var x = 2
 
 
@@ -12,6 +11,7 @@ const autostartButton = document.getElementById('auto')
 const randButton = document.getElementById('randbutton')
 let circleTurn
 let auto = false
+let randclicked = false
 
 startGame()
 mybutton.addEventListener('click', changegrid)
@@ -19,12 +19,14 @@ autostartButton.addEventListener('click', autoset)
 restartButton.addEventListener('click', double)
 randButton.addEventListener('click', pickrandom)
 currentClass = 'color-orangered'
-function double(){
-  x=2
+
+function double() {
+  x = 2
   changegrid()
   resetGame()
 }
-function autoset(){
+
+function autoset() {
   auto = !auto
 }
 
@@ -34,6 +36,7 @@ function startGame() {
 }
 
 function resetGame() {
+  randclicked = false
   cellElements = document.querySelectorAll('[data-cell]')
   cellElements.forEach(cell => {
     cell.classList.remove('color-orangered')
@@ -43,10 +46,12 @@ function resetGame() {
     cell.removeEventListener('click', handleClick)
     cell.removeEventListener("contextmenu", e => e.preventDefault());
     cell.removeEventListener('contextmenu', handleClick)
-    cell.addEventListener('click', handleClick,{ once: true })
+    cell.addEventListener('click', handleClick, {
+      once: true
+    })
     cell.addEventListener('contextmenu', handleClick)
     cell.addEventListener("contextmenu", e => e.preventDefault());
-    
+
     winningMessageElement.classList.remove('show')
   })
 }
@@ -54,95 +59,101 @@ function resetGame() {
 
 
 function handleClick(e) {
-    const cell = e.target
-    const type = e.type
-    if (doesboxhavecolor(e)){
+  const cell = e.target
+  const type = e.type
+  if (doesboxhavecolor(e)) {
     if (type == 'click') {
-      if (cell.classList.contains('buffer')){
-        
-    addcolor(cell, currentClass)
-      } else{
-        
+      if (cell.classList.contains('buffer')) {
+
+        addcolor(cell, currentClass)
+      } else {
+
         winningMessageElement.classList.add('show')
-        
+
       }
-    } else if (type == 'contextmenu'){
+    } else if (type == 'contextmenu') {
       addcolor(cell, currentClass)
-      setTimeout(() => {  removecolor(cell, currentClass) ; }, 2000);
-      
+      setTimeout(() => {
+        removecolor(cell, currentClass);
+      }, 2000);
+
     }
-    if (checkrestart()){
+    if (checkrestart()) {
       console.log('coolio')
       changegrid()
-      }
     }
   }
-
-
-function addcolor(cell,currentclass) {
-    cell.classList.add(currentclass)
 }
 
-function removecolor(cell,currentclass) {
+
+function addcolor(cell, currentclass) {
+  cell.classList.add(currentclass)
+}
+
+function removecolor(cell, currentclass) {
   cell.classList.remove(currentclass)
 }
 
-function doesboxhavecolor(e){
+function doesboxhavecolor(e) {
   return !e.target.classList.contains(currentClass)
 }
 
 function checkrestart() {
-    return [...cellElements].every(cell => {
-        return cell.classList.contains('buffer') && cell.classList.contains(currentClass)||!cell.classList.contains('buffer') && !cell.classList.contains(currentClass)
-})}
+  return [...cellElements].every(cell => {
+    return cell.classList.contains('buffer') && cell.classList.contains(currentClass) || !cell.classList.contains('buffer') && !cell.classList.contains(currentClass)
+  })
+}
 
-function changegrid(){
+function changegrid() {
   x++
   removeAllChildNodes(board)
-  board.style.gridTemplateColumns= `repeat(${x},auto)`
+  board.style.gridTemplateColumns = `repeat(${x},auto)`
   addAllChildNodes()
   resetGame()
-  
-  
+
+
 }
 
 
 function removeAllChildNodes(parent) {
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-    }
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
 }
 
-function addAllChildNodes(){
-  
-  for (let step = 0; step < x**2; step++) {
+function addAllChildNodes() {
+
+  for (let step = 0; step < x ** 2; step++) {
     var cello = document.createElement("div")
     cello.setAttribute("data-cell", '')
     cello.classList.add("cell")
     board.appendChild(cello)
-}}
+  }
+}
 
 function pickrandom() {
-    for (cell of getRandomList()) {/*{
-      let randomColor = Math.floor(Math.random()*16777215).toString(16);
-      let cellZ = [...cellElements][cell]
-      cellZ.setAttribute("style", `background:${currentClass}`)*/
-      let cellZ = [...cellElements][cell]
-      cellZ.classList.add(currentClass)
-      setTimeout(() => {  
-        cellZ.classList.remove(currentClass)
-        cellZ.classList.add('buffer')
-       ; }, 2000);
-       
-      
-   
-    }
-  }
+  if (randclicked) return
+  for (cell of getRandomList()) {
+    /*{
+          let randomColor = Math.floor(Math.random()*16777215).toString(16);
+          let cellZ = [...cellElements][cell]
+          cellZ.setAttribute("style", `background:${currentClass}`)*/
+    let cellZ = [...cellElements][cell]
+    cellZ.classList.add(currentClass)
+    setTimeout(() => {
+      cellZ.classList.remove(currentClass)
+      cellZ.classList.add('buffer');
+    }, 2000);
+    randclicked = true
 
-function getRandomList(){
+
+  }
+}
+
+function getRandomList() {
   var randomList = new Set()
-  while (randomList.size < x*2) {
-  randomList.add(Math.floor(Math.random() * x**2))
+  while (randomList.size < x * 2) {
+    randomList.add(Math.floor(Math.random() * x ** 2))
   }
   return randomList
 }
