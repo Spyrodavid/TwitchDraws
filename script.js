@@ -14,6 +14,7 @@ let circleTurn
 let auto = false
 let randclicked = false
 let randomcolor = false
+let canclick = false
 startGame()
 mybutton.addEventListener('click', changegrid)
 autostartButton.addEventListener('click', autoset)
@@ -41,6 +42,7 @@ function startGame() {
 
 function resetGame() {
   randclicked = false
+  canclick = false
   cellElements = document.querySelectorAll('[data-cell]')
   cellElements.forEach(cell => {
     cell.classList.remove('color-orangered')
@@ -64,6 +66,7 @@ function resetGame() {
 
 function handleClick(e) {
   if (!randclicked) return
+  if (!canclick) return
   const cell = e.target
   const type = e.type
   if (doesboxhavecolor(e)) {
@@ -138,6 +141,7 @@ function addAllChildNodes() {
 
 function pickrandom() {
   if (randclicked) return
+  randclicked = true
   for (cell of getRandomList()) {
     /*{
           let randomColor = Math.floor(Math.random()*16777215).toString(16);
@@ -153,8 +157,10 @@ function pickrandom() {
     setTimeout(() => {
       cellZ.removeAttribute("style", `background:${theColor}`)
       cellZ.classList.add('buffer');
+      canclick = true
     }, 2000);
-    randclicked = true
+    
+    
 
 
   }
