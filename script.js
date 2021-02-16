@@ -9,15 +9,17 @@ const restartButton = document.getElementById('restartButton')
 const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
 const autostartButton = document.getElementById('auto')
 const randButton = document.getElementById('randbutton')
+const colorButton = document.getElementById('color')
 let circleTurn
 let auto = false
 let randclicked = false
-
+let randomcolor = false
 startGame()
 mybutton.addEventListener('click', changegrid)
 autostartButton.addEventListener('click', autoset)
 restartButton.addEventListener('click', double)
 randButton.addEventListener('click', pickrandom)
+colorButton.addEventListener('click', colorset)
 currentClass = 'color-orangered'
 
 function double() {
@@ -25,7 +27,9 @@ function double() {
   changegrid()
   resetGame()
 }
-
+function colorset() {
+  randomcolor = !randomcolor
+}
 function autoset() {
   auto = !auto
 }
@@ -140,9 +144,14 @@ function pickrandom() {
           let cellZ = [...cellElements][cell]
           cellZ.setAttribute("style", `background:${currentClass}`)*/
     let cellZ = [...cellElements][cell]
-    cellZ.classList.add(currentClass)
+    if (randomcolor){
+    theColor = getRandomColor()
+    } else {
+      theColor = currentClass
+    }
+    cellZ.classList.add(theColor)
     setTimeout(() => {
-      cellZ.classList.remove(currentClass)
+      cellZ.classList.remove(theColor)
       cellZ.classList.add('buffer');
     }, 2000);
     randclicked = true
@@ -157,4 +166,13 @@ function getRandomList() {
     randomList.add(Math.floor(Math.random() * x ** 2))
   }
   return randomList
+}
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * letters.length)];
+  }
+  return color;
 }
