@@ -2,7 +2,7 @@
     box-sizing: border-box;
 }
 .container{
-  position:relative
+  display: block;
 }
 body {
     margin: 0;
