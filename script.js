@@ -110,7 +110,6 @@ function checkrestart() {
 }
 
 function changegrid() {
-  x++
   removeAllChildNodes(board)
   board.style.gridTemplateColumns = `repeat(${x},auto)`
   addAllChildNodes()
@@ -138,6 +137,7 @@ function addAllChildNodes() {
 
 function pickrandom() {
   if (randclicked) return
+  randclicked = true
   for (cell of getRandomList()) {
     /*{
           let randomColor = Math.floor(Math.random()*16777215).toString(16);
@@ -154,7 +154,7 @@ function pickrandom() {
       cellZ.removeAttribute("style", `background:${theColor}`)
       cellZ.classList.add('buffer');
     }, 2000);
-    randclicked = true
+    
 
 
   }
