@@ -59,6 +59,7 @@ function resetGame() {
 
 
 function handleClick(e) {
+  if (!randclicked) return
   const cell = e.target
   const type = e.type
   if (doesboxhavecolor(e)) {
