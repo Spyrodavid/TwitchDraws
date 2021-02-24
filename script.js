@@ -1,184 +1,155 @@
-var x = 2
+var Size = 3
 
 
-const mybutton = document.getElementById('mybutton')
-var cellElements = [];
+const checkButton = document.getElementById('checkButton')
+const playButton = document.getElementById('playButton')
 const board = document.getElementById('board')
-const winningMessageElement = document.getElementById('winningMessage')
-const restartButton = document.getElementById('restartButton')
-const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
-const autostartButton = document.getElementById('auto')
-const randButton = document.getElementById('randbutton')
-const colorButton = document.getElementById('color')
-let circleTurn
-let auto = false
-let randclicked = false
-let randomcolor = false
-let canclick = false
-startGame()
-mybutton.addEventListener('click', changegrid)
-autostartButton.addEventListener('click', autoset)
-restartButton.addEventListener('click', double)
-randButton.addEventListener('click', pickrandom)
-colorButton.addEventListener('click', colorset)
-currentClass = 'color-orangered'
 
-function double() {
-  x = 2
-  changegrid()
-  resetGame()
-}
-function colorset() {
-  randomcolor = !randomcolor
-}
-function autoset() {
-  auto = !auto
-}
+checkButton.addEventListener('click', playRound)
+playButton.addEventListener('click', fate)
+var cellElements = [];
+
+startGame()
 
 function startGame() {
-  changegrid()
-  resetGame()
+	board.style.gridTemplateColumns = `repeat(${Size},auto)`
+	addCellsToBoard()
+	clearGame()
+	setCoordinate()
 }
 
-function resetGame() {
-  randclicked = false
-  canclick = false
-  cellElements = document.querySelectorAll('[data-cell]')
-  cellElements.forEach(cell => {
-    cell.classList.remove('color-orangered')
-    cell.classList.remove('color-blue')
-    cell.classList.remove('buffer')
-
-    cell.removeEventListener('click', handleClick)
-    cell.removeEventListener("contextmenu", e => e.preventDefault());
-    cell.removeEventListener('contextmenu', handleClick)
-    cell.addEventListener('click', handleClick, {
-      once: true
-    })
-    cell.addEventListener('contextmenu', handleClick)
-    cell.addEventListener("contextmenu", e => e.preventDefault());
-
-    winningMessageElement.classList.remove('show')
-  })
+function clearGame() {
+	cellElements = document.querySelectorAll('[data-cell]')
+	cellElements.forEach(cell => {
+		cell.addEventListener('click', handleClick)
+		cell.addEventListener('contextmenu', handleClick)
+		cell.addEventListener("contextmenu", e => e.preventDefault());
+	})
 }
-
-
 
 function handleClick(e) {
-  if (!randclicked) return
-  if (!canclick) return
-  const cell = e.target
-  const type = e.type
-  if (doesboxhavecolor(e)) {
-    if (type == 'click') {
-      if (cell.classList.contains('buffer')) {
-
-        addcolor(cell, currentClass)
-      } else {
-
-        winningMessageElement.classList.add('show')
-
-      }
-    } else if (type == 'contextmenu') {
-      addcolor(cell, currentClass)
-      setTimeout(() => {
-        removecolor(cell, currentClass);
-      }, 2000);
-
-    }
-    if (checkrestart()) {
-      console.log('coolio')
-      changegrid()
-    }
-  }
-}
-
-
-function addcolor(cell, currentclass) {
-  cell.classList.add(currentclass)
+	e.target.classList.toggle('living')
 }
 
 function removecolor(cell, currentclass) {
-  cell.classList.remove(currentclass)
+	cell.classList.remove(currentclass)
 }
 
-function doesboxhavecolor(e) {
-  return !e.target.classList.contains(currentClass)
+function removeCellsFromBoard(parent) {
+	while (parent.firstChild) {
+		parent.removeChild(parent.firstChild);
+	}
 }
 
-function checkrestart() {
-  return [...cellElements].every(cell => {
-    return cell.classList.contains('buffer') && cell.classList.contains(currentClass) || !cell.classList.contains('buffer') && !cell.classList.contains(currentClass)
-  })
+function addCellsToBoard() {
+	for (let step = 0; step < Size ** 2; step++) {
+		var cello = document.createElement("div")
+		cello.setAttribute("data-cell", '')
+		cello.classList.add("cell")
+		board.appendChild(cello)
+	}
 }
 
-function changegrid() {
-  x++
-  removeAllChildNodes(board)
-  board.style.gridTemplateColumns = `repeat(${x},auto)`
-  addAllChildNodes()
-  resetGame()
-
-
+function setCoordinate() {
+	i = 0
+	board.childNodes.forEach(cell => {
+		let x = i % Size
+		let y = Math.floor(i / Size)
+		cell.setAttribute('x', `${x}`)
+		cell.setAttribute('y', `${y}`)
+		i++
+	})
 }
 
-
-function removeAllChildNodes(parent) {
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild);
-  }
+function playRound() {
+	board.childNodes.forEach(cell => {
+		
+		let coordinates = getCoordinates(cell)
+		let cellsAlive = getAroundCell(coordinates)
+		setFate(cell, cellsAlive)
+	})
 }
 
-function addAllChildNodes() {
-
-  for (let step = 0; step < x ** 2; step++) {
-    var cello = document.createElement("div")
-    cello.setAttribute("data-cell", '')
-    cello.classList.add("cell")
-    board.appendChild(cello)
-  }
+function getCoordinates(cell){
+	let x = parseInt(cell.getAttribute('x'))
+	let y = parseInt(cell.getAttribute('y'))
+	return [x, y]
 }
 
-function pickrandom() {
-  if (randclicked) return
-  randclicked = true
-  for (cell of getRandomList()) {
-    /*{
-          let randomColor = Math.floor(Math.random()*16777215).toString(16);
-          let cellZ = [...cellElements][cell]
-          cellZ.setAttribute("style", `background:${currentClass}`)*/
-    let cellZ = [...cellElements][cell]
-    if (randomcolor){
-    theColor = getRandomColor()
-    } else {
-      theColor = "#173AEB"
-    }
-    cellZ.setAttribute("style", `background:${theColor}`)
-    setTimeout(() => {
-      cellZ.removeAttribute("style", `background:${theColor}`)
-      cellZ.classList.add('buffer');
-      canclick = true
-    }, 2000);
-    
-    
+function getAroundCell(coordinates){
+	
 
+	let cellsAlive = 0
 
-  }
+	for (cell of listCoordinates(coordinates)){
+		if (checkCell(lineCoordinate(cell))){
+			cellsAlive+=1
+		}
+	}
+	return cellsAlive
 }
 
-function getRandomList() {
-  var randomList = new Set()
-  while (randomList.size < x * 2) {
-    randomList.add(Math.floor(Math.random() * x ** 2))
-  }
-  return randomList
+function lineCoordinate(coordinates){
+	[x,y] = coordinates
+	return line = x*Size+y
 }
 
-function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * letters.length)];
-  }
-  return color;
+function checkCell(current){
+	if (board.childNodes[current].classList.contains('living')){
+		return true
+	}
+}
+
+function listCoordinates(coordinates){
+	[x,y] = coordinates
+	check = []
+	let list = []
+	list.push([x,y+1])
+	list.push([x,y-1])
+	list.push([x+1,y])
+	list.push([x-1,y])
+	list.push([x+1,y+1])
+	list.push([x-1,y-1])
+	list.push([x+1,y-1])
+	list.push([x-1,y+1])
+	list = list.filter(item=>{
+		console.log(item)
+		if (item[0]<0 || item[1]<0 || item[0]>x-1 || item[1]>x-1){
+			console.log('no')
+			return false
+		} else {
+			console.log('yes')
+			return true
+			
+		}
+	})
+	//console.log(coordinates)
+	//console.log(list)
+	return list
+}
+
+function setFate(cell, cellsAlive){
+
+	if (cell.classList.contains('living')){
+		if (cellsAlive < 2){
+			cell.classList.add('dying')
+		} else if (cellsAlive == 2 || cellsAlive == 3) {
+			
+		} else if (cellsAlive > 3){
+			cell.classList.add('dying')
+		}
+	} else {
+		if (cellsAlive == 3){
+			cell.classList.add('living')
+		}
+	}
+}
+
+function fate(){
+	board.childNodes.forEach(cell=>{
+		if (cell.classList.contains('dying')){
+			cell.classList.remove('living')
+			cell.classList.remove('dying')
+		}
+	})
 }
