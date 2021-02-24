@@ -1,6 +1,14 @@
 var Size = 110
 var interval
 
+var mouseDown = 0;
+document.body.onmousedown = function() { 
+  mouseDown = 1;
+}
+document.body.onmouseup = function() {
+  mouseDown = 0;
+}
+
 Size = Size + 1
 
 const clearButton = document.getElementById('clearButton')
@@ -9,6 +17,7 @@ const board = document.getElementById('board')
 
 clearButton.addEventListener('click', clear)
 playButton.addEventListener('click', auto)
+
 var cellElements = [];
 
 startGame()
@@ -25,12 +34,18 @@ function clearGame() {
 	cellElements = document.querySelectorAll('[data-cell]')
 	cellElements.forEach(cell => {
 		cell.addEventListener('click', handleClick)
+		cell.addEventListener('mouseover', handleDrag)
 		cell.addEventListener('contextmenu', handleClick)
 		cell.addEventListener("contextmenu", e => e.preventDefault());
 	})
 }
-
+function handleDrag(e){
+if (mouseDown!= 0){
+	e.target.classList.toggle('alive')
+}
+}
 function handleClick(e) {
+	console.log(mouseDown)
 	e.target.classList.toggle('alive')
 }
 
