@@ -17,10 +17,14 @@ body {
 }
 
 .cell {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background-color: grey;
     border: 1px solid lightgrey;
+}
+
+.trail {
+  background-color:darkslategray;
 }
 
 .dying {

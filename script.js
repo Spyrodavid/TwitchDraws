@@ -1,4 +1,4 @@
-var Size = 90
+var Size = 110
 var interval
 
 Size = Size + 1
@@ -138,6 +138,9 @@ function setFate(cell, cellsAlive){
 
 function fate(){
 	board.childNodes.forEach(cell=>{
+		if (cell.classList.contains('alive')){
+			cell.classList.add('trail')
+		}
 		if (cell.classList.contains('dying')){
 			cell.classList.remove('alive')
 			cell.classList.remove('dying')
@@ -147,11 +150,12 @@ function fate(){
 			cell.classList.remove('dying')
 			cell.classList.remove('birth')
 		}
+		
 	})
 }
 
 function auto(){
-	interval = setInterval(double, 800);
+	interval = setInterval(double, 100);
 }
 
 function double(){
@@ -162,7 +166,6 @@ function double(){
 
 function setBuffer(){
 	let list = []
-	console.log(123)
 	list = list.concat(range(0,Size))
 	for (x of range(1,Size-2)){
 		list = list.concat(Size*x)
@@ -172,7 +175,6 @@ function setBuffer(){
 
 	list.forEach(cell=>{
 		board.childNodes[cell].classList.add('buffer')
-		console.log(123)
 })}
 
 function range(min, max) {
@@ -194,6 +196,7 @@ function buffer(){
   }
 
 function clear(){
+	clearInterval(interval)
 	board.childNodes.forEach(cell=>{
 		for (x of cell.classList){
 			 if (x != 'buffer' && x != 'cell'){
@@ -201,5 +204,4 @@ function clear(){
 			}
 		}
 	})
-	clearInterval(interval)
 }
