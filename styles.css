@@ -16,8 +16,8 @@ body {
 }
 
 .cell {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     background-color: black;
     border: 1px solid white;
 }
@@ -27,9 +27,13 @@ body {
 }
 
 .buffer{
-  background-color: black;
+  background-color: white;
 }
 
-.living {
+.alive {
   background-color: orangered ;
+}
+
+.birth {
+  background-color: coral;
 }

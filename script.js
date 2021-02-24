@@ -1,12 +1,12 @@
-var Size = 3
+var Size = 6
 
 
-const checkButton = document.getElementById('checkButton')
+const clearButton = document.getElementById('clearButton')
 const playButton = document.getElementById('playButton')
 const board = document.getElementById('board')
 
-checkButton.addEventListener('click', playRound)
-playButton.addEventListener('click', fate)
+clearButton.addEventListener('click', clear)
+playButton.addEventListener('click', auto)
 var cellElements = [];
 
 startGame()
@@ -16,6 +16,7 @@ function startGame() {
 	addCellsToBoard()
 	clearGame()
 	setCoordinate()
+	setBuffer()
 }
 
 function clearGame() {
@@ -28,7 +29,7 @@ function clearGame() {
 }
 
 function handleClick(e) {
-	e.target.classList.toggle('living')
+	e.target.classList.toggle('alive')
 }
 
 function removecolor(cell, currentclass) {
@@ -53,84 +54,71 @@ function addCellsToBoard() {
 function setCoordinate() {
 	i = 0
 	board.childNodes.forEach(cell => {
-		let x = i % Size
-		let y = Math.floor(i / Size)
-		cell.setAttribute('x', `${x}`)
-		cell.setAttribute('y', `${y}`)
+		cell.setAttribute('num', `${i}`)
 		i++
 	})
 }
 
 function playRound() {
 	board.childNodes.forEach(cell => {
-		
-		let coordinates = getCoordinates(cell)
-		let cellsAlive = getAroundCell(coordinates)
+		let cellsAlive = getAroundCell(cell)
 		setFate(cell, cellsAlive)
 	})
 }
 
-function getCoordinates(cell){
-	let x = parseInt(cell.getAttribute('x'))
-	let y = parseInt(cell.getAttribute('y'))
-	return [x, y]
+function getCoordinate(cell){
+	let num = parseInt(cell.getAttribute('num'))
+	return num
 }
 
-function getAroundCell(coordinates){
+function getAroundCell(cell){
 	
 
 	let cellsAlive = 0
 
-	for (cell of listCoordinates(coordinates)){
-		if (checkCell(lineCoordinate(cell))){
+	for (cell of listCoordinates(cell)){
+		if (checkCell(cell)){
 			cellsAlive+=1
 		}
 	}
 	return cellsAlive
 }
 
-function lineCoordinate(coordinates){
-	[x,y] = coordinates
-	return line = x*Size+y
-}
-
 function checkCell(current){
-	if (board.childNodes[current].classList.contains('living')){
+	if (current.classList.contains('alive')){
 		return true
 	}
 }
 
-function listCoordinates(coordinates){
-	[x,y] = coordinates
-	check = []
+function listCoordinates(cell){
+	currCell = parseInt(cell.getAttribute('num'))
 	let list = []
-	list.push([x,y+1])
-	list.push([x,y-1])
-	list.push([x+1,y])
-	list.push([x-1,y])
-	list.push([x+1,y+1])
-	list.push([x-1,y-1])
-	list.push([x+1,y-1])
-	list.push([x-1,y+1])
+	list.push(currCell+1)
+	list.push(currCell-1)
+	list.push(currCell+Size)
+	list.push(currCell+Size+1)
+	list.push(currCell+Size-1)
+	list.push(currCell-Size)
+	list.push(currCell-Size+1)
+	list.push(currCell-Size-1)
 	list = list.filter(item=>{
-		console.log(item)
-		if (item[0]<0 || item[1]<0 || item[0]>x-1 || item[1]>x-1){
-			console.log('no')
+		if (item<0 || item>(Size**2)-1){
 			return false
 		} else {
-			console.log('yes')
 			return true
-			
 		}
 	})
-	//console.log(coordinates)
-	//console.log(list)
+
+	list = list.map(item=>{
+		return board.childNodes[item]
+	})
 	return list
 }
 
 function setFate(cell, cellsAlive){
+	if (!cell.classList.contains('buffer')){
 
-	if (cell.classList.contains('living')){
+	if (cell.classList.contains('alive')){
 		if (cellsAlive < 2){
 			cell.classList.add('dying')
 		} else if (cellsAlive == 2 || cellsAlive == 3) {
@@ -140,16 +128,75 @@ function setFate(cell, cellsAlive){
 		}
 	} else {
 		if (cellsAlive == 3){
-			cell.classList.add('living')
+			cell.classList.add('birth')
 		}
 	}
+}
 }
 
 function fate(){
 	board.childNodes.forEach(cell=>{
 		if (cell.classList.contains('dying')){
-			cell.classList.remove('living')
+			cell.classList.remove('alive')
 			cell.classList.remove('dying')
+		}
+		else if (cell.classList.contains('birth')){
+			cell.classList.add('alive')
+			cell.classList.remove('dying')
+			cell.classList.remove('birth')
+		}
+	})
+}
+
+function auto(){
+	var interval = setInterval(double, 200);
+}
+
+function double(){
+	buffer()
+	playRound()
+	fate()
+}
+
+function setBuffer(){
+	let list = []
+	console.log(123)
+	list = list.concat(range(0,Size))
+	for (x of range(1,Size-2)){
+		list = list.concat(Size*x)
+		list = list.concat(Size*x+Size-1)
+	}
+	list = list.concat(range(Size**2-Size-1,Size**2-1))
+
+	list.forEach(cell=>{
+		board.childNodes[cell].classList.add('buffer')
+		console.log(123)
+})}
+
+function range(min, max) {
+	var len = max - min + 1;
+	var arr = new Array(len);
+	for (var i=0; i<len; i++) {
+	  arr[i] = min + i;
+	}
+	return arr;
+  }
+
+function buffer(){
+	  board.childNodes.forEach(cell=>{
+		  if (cell.classList.contains('buffer')){
+		  cell.classList.remove('alive')
+		  cell.classList.remove('birth')
+		  cell.classList.remove('dying')
+	  }})
+  }
+
+function clear(){
+	board.childNodes.forEach(cell=>{
+		for (x of cell.classList){
+			 if (x != 'buffer' && x != 'cell'){
+			cell.classList.remove(x)
+			}
 		}
 	})
 }
