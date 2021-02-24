@@ -1,5 +1,7 @@
-var Size = 6
+var Size = 90
+var interval
 
+Size = Size + 1
 
 const clearButton = document.getElementById('clearButton')
 const playButton = document.getElementById('playButton')
@@ -149,7 +151,7 @@ function fate(){
 }
 
 function auto(){
-	var interval = setInterval(double, 200);
+	interval = setInterval(double, 800);
 }
 
 function double(){
@@ -199,4 +201,5 @@ function clear(){
 			}
 		}
 	})
+	clearInterval(interval)
 }

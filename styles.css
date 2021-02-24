@@ -4,6 +4,7 @@
 
 body {
     margin: 0;
+    background-color: grey;
 }
 
 .board {
@@ -18,8 +19,8 @@ body {
 .cell {
     width: 10px;
     height: 10px;
-    background-color: black;
-    border: 1px solid white;
+    background-color: grey;
+    border: 1px solid lightgrey;
 }
 
 .dying {
@@ -27,11 +28,12 @@ body {
 }
 
 .buffer{
-  background-color: white;
+  background-color: grey;
+  border: 1px solid grey;
 }
 
 .alive {
-  background-color: orangered ;
+  background-color: yellow ;
 }
 
 .birth {
