@@ -16,30 +16,9 @@ body {
 
 }
 
-.cell {
+div div {
     width: 8px;
     height: 8px;
     background-color: grey;
     border: 1px solid lightgrey;
-}
-
-.trail {
-  background-color:darkslategray;
-}
-
-.dying {
-  background-color: #173AEB;
-}
-
-.buffer{
-  background-color: grey;
-  border: 1px solid grey;
-}
-
-.alive {
-  background-color: yellow ;
-}
-
-.birth {
-  background-color: coral;
 }
