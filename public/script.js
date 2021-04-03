@@ -1,8 +1,8 @@
-var size = 5
+var size = 2
 const board = document.getElementById('board')
 
-/*
-startBoard(size, color)
+
+startBoard(size)
 
 function startBoard(size) {
 	board.style.gridTemplateColumns = `repeat(${size},auto)`
@@ -17,20 +17,17 @@ function addCellsToBoard(size, color) {
 		board.appendChild(cell)
 	}
 }
-*/
-function changeBoardSize() {
-	size += 1
-	board.style.gridTemplateColumns = `repeat(${size},auto)`
+
+function checkFull() {
+	if(board.childNodes.every(cell =>{cell.backgroundColor != "grey"})){
+	board.childNodes.forEach(cell=> (cell.backgroundColor = "grey"))
+	}
 }
 
 function addCell(color) {
-	var cell = document.createElement("div")
+	var cell = board.childNodes[Math.floor(Math.random() * size**2) + 1]
 	cell.style.backgroundColor = color
-	cell.classList.add("cell")
-	board.appendChild(cell)
-	if (size ** 2 + 1 ** 2 <= board.childElementCount) {
-		changeBoardSize()
-	}
+	checkFull()
 }
 /*
 function changeColor(user, color) {
