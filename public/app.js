@@ -1,9 +1,15 @@
 var socket = io();
 
-var messages = document.getElementById('messages');
-var form = document.getElementById('form');
-var input = document.getElementById('input');
-
 socket.on('color', msg => {
-  addUser("user")
+  if(isColor(msg)){
+  addCell(msg)
+  }
 });
+
+function isColor(strColor){
+  var s = new Option().style;
+  s.color = strColor;
+  console.log(s.color)
+  console.log(strColor)
+  return s.color == strColor;
+}

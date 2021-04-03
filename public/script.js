@@ -1,43 +1,38 @@
-var size = 0
-const color = "#000000"
-const playButton = document.getElementById('playButton')
+var size = 5
 const board = document.getElementById('board')
-playButton.addEventListener('click', addUser)
-var users = []
+
+/*
 startBoard(size, color)
 
-function startBoard(size, color) {
+function startBoard(size) {
 	board.style.gridTemplateColumns = `repeat(${size},auto)`
-	addCellsToBoard(size, color)
+	addCellsToBoard(size)
 }
 
 function addCellsToBoard(size, color) {
 	for (let step = 0; step < size ** 2; step++) {
 		var cell = document.createElement("div")
-		cell.style.backgroundColor = color
+		cell.style.backgroundColor = "grey"
 		cell.classList.add("cell")
-		cell.setAttribute("user", "user")
 		board.appendChild(cell)
 	}
 }
-
+*/
 function changeBoardSize() {
 	size += 1
 	board.style.gridTemplateColumns = `repeat(${size},auto)`
 }
 
-function addUser(user) {
+function addCell(color) {
 	var cell = document.createElement("div")
 	cell.style.backgroundColor = color
 	cell.classList.add("cell")
-	cell.setAttribute("user", `${user}`)
 	board.appendChild(cell)
-	cell.user = "123"
 	if (size ** 2 + 1 ** 2 <= board.childElementCount) {
 		changeBoardSize()
 	}
 }
-
+/*
 function changeColor(user, color) {
 	var specUser
 	board.querySelectorAll("div").forEach(cell => {
@@ -50,3 +45,4 @@ function changeColor(user, color) {
 	console.log(specUser+"123")
 	specUser.style.backgroundColor = color
 }
+*/
