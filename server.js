@@ -46,7 +46,6 @@ function onMessageHandler (target, context, msg, self) {
   // If the command is known, let's execute it
   if (commandName.startsWith('!color ')) {
       command = commandName.substring(7)
-      console.log(command)
       io.emit('color', command);
   }
 }
